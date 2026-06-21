@@ -73,6 +73,8 @@ python -m sequencial.simulacao_probabilistica
 
 [10] BEAZLEY, D. M. Understanding the Python GIL. In: *PyCon US*, 2010. Disponível em: https://dabeaz.com/python/UnderstandingGIL.pdf — referência técnica usada para justificar o comportamento de speedup sub-linear observado na versão paralela (impacto do Global Interpreter Lock).
 
+[11] Utilizamos o Claude (Anthropic) como apoio para formatação completa do projeto.
+
 ## 📝 Notas de Implementação e Justificativas
 
 ### Condição de Corrida (Race Condition) na Versão Paralela
