@@ -1,0 +1,11 @@
+=== CONFIGURACAO EXPERIMENTAL ===
+
+Processador               : AMD Ryzen 5 5600X 6-Core Processor
+Nucleos fisicos           : 6
+Nucleos logicos           : 12
+Memoria RAM               : 127.9 GB
+Sistema operacional       : Windows 11 (10.0.26200)
+Linguagem                 : CPython (Python)
+Versao do interpretador   : 3.13.3
+Arquitetura               : AMD64
+Ambiente de execucao      : Execucao local; versao distribuida via Sockets TCP em localhost

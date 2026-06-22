@@ -110,5 +110,26 @@ class SimulacaoParalela:
         # Aguarda todas as threads terminarem antes de retornar o tempo total.
         for t in threads:
             t.join()
-            
+
         return tempo_total
+
+
+if __name__ == "__main__":
+    print("=== SIMULACAO PARALELA (THREADS) ===")
+    num_threads = 4
+    sim = SimulacaoParalela(
+        linhas=100,
+        colunas=100,
+        geracoes=20,
+        percentual_espalhadores=0.05,
+        limiar_convencimento=3,
+        semente=42,
+        num_threads=num_threads,
+    )
+    tempo = sim.executar()
+    contagem = contarestados(sim.grade_atual)
+
+    print(f"Threads utilizadas: {num_threads}")
+    print(f"Geracoes executadas: {sim.geracoes_executadas}")
+    print(f"Ignorantes: {contagem[IGNORANTE]} | Espalhadores: {contagem[ESPALHADOR]} | Inativos: {contagem[INATIVO]}")
+    print(f"Tempo total: {tempo:.6f} segundos")

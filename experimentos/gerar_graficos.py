@@ -11,26 +11,34 @@ def gerar_graficos():
 
     df = pd.read_csv(caminho_csv)
     
-    # Filtra apenas o maior cenário para os gráficos de Speedup e Eficiência por Threads/Workers
-    # para não poluir o gráfico, ou gera múltiplos gráficos.
+    # Para os gráficos de Speedup e Eficiência por Threads/Workers é preciso fixar
+    # UM cenário (mesmas gerações e percentual). Caso contrário, os diferentes
+    # cenários (g/p) da mesma matriz são plotados como uma única linha em zigue-zague.
     maior_matriz = df['matriz'].unique()[-1]
     df_maior = df[df['matriz'] == maior_matriz]
 
+    # Cenário representativo: o de maior numero de gerações (mais estável p/ medir).
+    g_rep = df_maior['geracoes'].max()
+    p_rep = df_maior[df_maior['geracoes'] == g_rep]['percentual_espalhadores'].iloc[0]
+    df_maior = df_maior[(df_maior['geracoes'] == g_rep) &
+                        (df_maior['percentual_espalhadores'] == p_rep)]
+    rotulo_cenario = f"Matriz {maior_matriz} | {g_rep} geracoes | {p_rep*100:.0f}% espalhadores"
+
     # 1. Gráfico de Speedup
     plt.figure(figsize=(10, 6))
-    
+
     # Paralela
-    df_par = df_maior[df_maior['versao'] == 'Paralela']
+    df_par = df_maior[df_maior['versao'] == 'Paralela'].sort_values('threads_workers')
     plt.plot(df_par['threads_workers'], df_par['speedup'], marker='o', label='Paralela (Threads)')
-    
+
     # Distribuída
-    df_dist = df_maior[df_maior['versao'] == 'Distribuida']
+    df_dist = df_maior[df_maior['versao'] == 'Distribuida'].sort_values('threads_workers')
     plt.plot(df_dist['threads_workers'], df_dist['speedup'], marker='s', label='Distribuida (Workers)')
-    
+
     # Ideal
     plt.plot([1, 8], [1, 8], 'k--', label='Speedup Ideal')
-    
-    plt.title(f'Speedup - Matriz {maior_matriz}')
+
+    plt.title(f'Speedup - {rotulo_cenario}')
     plt.xlabel('Número de Threads / Workers')
     plt.ylabel('Speedup')
     plt.legend()
@@ -46,8 +54,8 @@ def gerar_graficos():
     
     # Distribuída
     plt.plot(df_dist['threads_workers'], df_dist['eficiencia'], marker='s', label='Distribuida (Workers)')
-    
-    plt.title(f'Eficiência - Matriz {maior_matriz}')
+
+    plt.title(f'Eficiência - {rotulo_cenario}')
     plt.xlabel('Número de Threads / Workers')
     plt.ylabel('Eficiência')
     plt.ylim(0, 1.1)
